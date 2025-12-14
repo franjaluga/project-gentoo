@@ -1,0 +1,3 @@
+# GRATUITAS Y LAS DE BINARIOS
+
+echo "ACCEPT_LICENSE='-* @FREE @BINARY-REDISTRIBUTABLE'" >> /etc/portage/make.conf

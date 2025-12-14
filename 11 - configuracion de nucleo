@@ -1,0 +1,5 @@
+emerge --ask sys-kernel/linux-firmware
+
+emerge --ask sys-firmware/sof-firmware
+
+

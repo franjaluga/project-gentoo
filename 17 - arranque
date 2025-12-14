@@ -1,0 +1,22 @@
+echo 'GRUB_PLATFORMS="efi-64"' >> /etc/portage/make.conf
+
+emerge --ask sys-boot/grub efibootmgr neofetch
+
+grub-install --efi-directory=/efi
+
+grub-install --target=x86_64-efi --efi-directory=/efi --removable
+
+emerge sys-boot/grub sys-boot/shim sys-boot/mokutil sys-boot/efibootmgr
+
+echo "GRUB_CFG=/efi/EFI/Gentoo/grub.cfg" >> /etc/env.d/99grub
+
+env-update
+
+grub-mkconfig -o /boot/grub/grub.cfg
+
+exit
+
+cd
+umount -l /mnt/gentoo/dev{/shm,/pts,}
+umount -R /mnt/gentoo
+reboot

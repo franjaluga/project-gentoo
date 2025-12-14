@@ -1,0 +1,6 @@
+mkdir -p /efi
+mount /dev/sda1 /efi
+
+emerge-webrsync
+
+

@@ -1,0 +1,4 @@
+# HP245 amdgpu radeonsi
+# qemu virgl
+
+echo '*/* VIDEO_CARDS: virgl' >> /etc/portage/package.use/00video_cards

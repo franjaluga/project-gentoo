@@ -1,0 +1,15 @@
+emerge --ask app-admin/sysklogd
+
+rc-update add sysklogd default
+
+emerge --ask sys-apps/mlocate
+
+emerge --ask app-shells/bash-completion
+
+emerge --ask net-misc/chrony
+
+rc-update add chronyd default
+
+emerge --ask sys-block/io-scheduler-udev-rules
+
+emerge --ask net-misc/dhcpcd

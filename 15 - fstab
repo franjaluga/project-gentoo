@@ -1,0 +1,13 @@
+echo "/dev/sda1   /efi        vfat    umask=0077,tz=UTC     0 2
+/dev/sda2   none         swap    sw                   0 0
+/dev/sda3   /            xfs    defaults,noatime              0 1" >> /etc/fstab
+
+
+echo gentoo > /etc/hostname
+
+emerge --ask net-misc/dhcpcd
+
+rc-update add dhcpcd default
+rc-service dhcpcd start
+
+

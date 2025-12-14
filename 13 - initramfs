@@ -1,0 +1,17 @@
+echo "sys-kernel/installkernel dracut" >> /etc/portage/package.use/installkernel
+
+mkdir /etc/dracut.conf.d
+
+
+UUID_ENCONTRADO=$(blkid -o value -s UUID /dev/sda3)
+echo "kernel_cmdline=\" root=UUID=$UUID_ENCONTRADO \"" >> /etc/dracut.conf.d/00-installkernel.conf
+
+emerge --ask sys-kernel/installkernel
+
+echo "sys-apps/systemd-utils boot kernel-install" >> /etc/portage/package.use/uki
+
+emerge --ask sys-apps/systemd-utils
+
+emerge --ask sys-kernel/installkernel
+
+

@@ -1,0 +1,29 @@
+#!/bin/bash
+#PARTICIONADO
+TARGET_DISK="/dev/sda"
+
+#LIMPIEZA DE PARTICIONES PREVIAS
+dd if=/dev/zero of=${TARGET_DISK} bs=512 count=1
+
+sfdisk ${TARGET_DISK} <<EOF
+label: dos
+size=1G, type=83, bootable
+size=4G, type=82
+type=83
+
+EOF
+
+D1="${TARGET_DISK}1"
+D2="${TARGET_DISK}2"
+D3="${TARGET_DISK}3"
+
+mkfs.vfat -F 32 $D1
+mkswap $D2
+swapon $D2
+mkfs.xfs $D3
+
+mkdir -p /mnt/gentoo
+mount $D3 /mnt/gentoo
+
+mkdir -p /mnt/gentoo/boot
+mount $D1 /mnt/gentoo/boot

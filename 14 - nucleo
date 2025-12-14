@@ -1,0 +1,8 @@
+
+
+#A COMPILAR: emerge --ask sys-kernel/gentoo-kernel
+#PRECOMPILADO: emerge --ask sys-kernel/gentoo-kernel-bin
+
+emerge --ask sys-kernel/gentoo-kernel-bin
+
+emerge --ask sys-kernel/gentoo-sources

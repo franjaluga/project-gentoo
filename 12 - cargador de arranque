@@ -1,0 +1,3 @@
+echo "sys-kernel/installkernel grub" >> /etc/portage/package.use/installkernel
+
+

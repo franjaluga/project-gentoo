@@ -1,0 +1,10 @@
+ln -sf ../usr/share/zoneinfo/America/Santiago /etc/localtime
+echo en_US.UTF-8 UTF-8 >> /etc/locale.gen
+echo es_ES.UTF-8 UTF-8 >> /etc/locale.gen
+
+locale-gen
+
+#es_ES UTF8
+eselect locale set 5
+
+env-update && source /etc/profile && export PS1="(chroot) ${PS1}"

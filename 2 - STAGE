@@ -1,0 +1,3 @@
+cd /mnt/gentoo
+wget https://distfiles.gentoo.org/releases/amd64/autobuilds/20251207T170056Z/stage3-amd64-desktop-openrc-20251207T170056Z.tar.xz
+tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner -C /mnt/gentoo
