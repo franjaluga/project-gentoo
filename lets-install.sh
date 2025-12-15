@@ -46,7 +46,7 @@ mount $D1 /mnt/gentoo/boot
 ###########################################################
 cd /mnt/gentoo
 wget ${STAGE3}
-tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner -C /mnt/gentoo
+tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner -C /mnt/gentoo && \
 
 
 ###########################################################
