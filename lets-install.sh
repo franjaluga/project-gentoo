@@ -127,8 +127,8 @@ env-update && source /etc/profile && export PS1="(chroot) ${PS1}"
 ###########################################################
 # 11. Emerger el firmware
 ###########################################################
-emerge --ask sys-kernel/linux-firmware
-emerge --ask sys-firmware/sof-firmware
+emerge --ask=n -q sys-kernel/linux-firmware
+emerge --ask=n -q sys-firmware/sof-firmware
 
 
 ###########################################################
@@ -145,23 +145,23 @@ mkdir /etc/dracut.conf.d
 UUID_ENCONTRADO=$(blkid -o value -s UUID /dev/sda3)
 echo "kernel_cmdline=\" root=UUID=$UUID_ENCONTRADO \"" >> /etc/dracut.conf.d/00-installkernel.conf
 
-emerge --ask sys-kernel/installkernel
+emerge --ask=n -q sys-kernel/installkernel
 
 echo "sys-apps/systemd-utils boot kernel-install" >> /etc/portage/package.use/uki
 
-emerge --ask sys-apps/systemd-utils
+emerge --ask=n -q sys-apps/systemd-utils
 
-emerge --ask sys-kernel/installkernel
+emerge --ask=n -q sys-kernel/installkernel
 
 #Se agrega a condición de revisar lo que ocurre con el grub
-emerge --ask=n dracut grub
+emerge --ask=n -q dracut grub
 
 
 ###########################################################
 # 14. Núcleo (Precompilado)
 ###########################################################
-emerge --ask sys-kernel/gentoo-kernel-bin
-emerge --ask sys-kernel/gentoo-sources
+emerge --ask=n -q sys-kernel/gentoo-kernel-bin
+emerge --ask=n -q sys-kernel/gentoo-sources
 
 
 ###########################################################
@@ -174,7 +174,7 @@ echo "/dev/sda1   /efi        vfat    umask=0077,tz=UTC     0 2
 
 echo gentoo > /etc/hostname
 
-emerge --ask net-misc/dhcpcd
+emerge --ask=n -q net-misc/dhcpcd
 
 rc-update add dhcpcd default
 rc-service dhcpcd start
@@ -184,21 +184,21 @@ rc-service dhcpcd start
 ###########################################################
 # 16. Utilidades
 ###########################################################
-emerge --ask app-admin/sysklogd
+emerge --ask=n -q app-admin/sysklogd
 
 rc-update add sysklogd default
 
-emerge --ask sys-apps/mlocate
+emerge --ask=n -q sys-apps/mlocate
 
-emerge --ask app-shells/bash-completion
+emerge --ask=n -q app-shells/bash-completion
 
-emerge --ask net-misc/chrony
+emerge --ask=n -q net-misc/chrony
 
 rc-update add chronyd default
 
-emerge --ask sys-block/io-scheduler-udev-rules
+emerge --ask=n -q sys-block/io-scheduler-udev-rules
 
-emerge --ask net-misc/dhcpcd
+emerge --ask=n -q net-misc/dhcpcd
 
 
 ###########################################################
@@ -206,7 +206,7 @@ emerge --ask net-misc/dhcpcd
 ###########################################################
 echo 'GRUB_PLATFORMS="efi-64"' >> /etc/portage/make.conf
 
-emerge --ask sys-boot/grub efibootmgr neofetch
+emerge --ask=n -q sys-boot/grub efibootmgr neofetch
 
 grub-install --efi-directory=/efi
 #se usa el de arriba VMWARE
