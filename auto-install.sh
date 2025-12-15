@@ -164,7 +164,7 @@ EOT
     #se usa el de arriba VMWARE
     #grub-install --target=x86_64-efi --efi-directory=/efi --removable
 
-    emerge sys-boot/grub sys-boot/shim sys-boot/mokutil sys-boot/efibootmgr
+    emerge -q sys-boot/grub sys-boot/shim sys-boot/mokutil sys-boot/efibootmgr
 
     echo "GRUB_CFG=/efi/EFI/Gentoo/grub.cfg" >> /etc/env.d/99grub
 
