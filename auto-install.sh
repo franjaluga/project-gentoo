@@ -179,6 +179,19 @@ EOT
     useradd -m -G users,wheel,audio,video,cdrom,portage -s /bin/bash tux
     passwd tux
 
+
+    ###########################################################
+    # Configuraciones finales (añadidas)
+    ###########################################################
+    emerge --ask=n -q app-admin/sudo
+
+    sed -i '/^# %wheel[[:space:]]\+ALL=(ALL)[[:space:]]\+ALL/s/^# //' /etc/sudoers
+
+    sudo emerge --ask=n -q sys-kernel/linux-firmware
+
+    sudo rc-update add elogind default
+    sudo rc-service elogind start
+
     # El script saldrá automáticamente de esta función.
 }
 export -f install_inside_chroot
