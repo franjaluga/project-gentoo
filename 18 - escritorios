@@ -1,7 +1,7 @@
-#esto va una vez instalado
+#esto va una vez instalado!!!
 
-useradd -m -G users,wheel,audio,video,cdrom,portage -s /bin/bash tunombredeusuario
-passwd tunombredeusuario
+# useradd -m -G users,wheel,audio,video,cdrom,portage -s /bin/bash tunombredeusuario
+# passwd tunombredeusuario
 
 emerge app-admin/sudo
 
