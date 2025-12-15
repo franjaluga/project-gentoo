@@ -1,4 +1,4 @@
-sed -i '/^COMMON_FLAGS/ s/\"/\"-march=native /' /mnd/gentoo/etc/portage/make.conf
+sed -i '/^COMMON_FLAGS/ s/\"/\"-march=native /' /mnt/gentoo/etc/portage/make.conf
 
 
 

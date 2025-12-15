@@ -1,0 +1,27 @@
+#esto va una vez instalado
+
+useradd -m -G users,wheel,audio,video,cdrom,portage -s /bin/bash tunombredeusuario
+passwd tunombredeusuario
+
+emerge app-admin/sudo
+
+sed -i '/^# %wheel[[:space:]]\+ALL=(ALL)[[:space:]]\+ALL/s/^# //' /etc/sudoers
+
+sudo emerge --ask sys-kernel/linux-firmware
+
+sudo rc-update add elogind default
+sudo rc-service elogind start
+
+# ahora si escritorio
+
+
+sudo emerge --ask=n -q x11-base/xorg-server x11-apps/xinit
+
+echo "x11-wm/dwm savedconfig xinerama" | sudo tee /etc/portage/package.use/dwm
+
+sudo emerge --ask=n -q x11-wm/dwm x11-misc/dmenu x11-terms/xterm
+
+#una vez instalado, se ejecuta
+echo "~/bin/dwm_status.sh &" >> ~/.xinitrc"
+echo "exec dwm" >> ~/.xinitrc"
+

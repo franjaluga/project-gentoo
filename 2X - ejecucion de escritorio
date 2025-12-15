@@ -1,0 +1,20 @@
+#para iniciar UNA VEZ se instaló, pero debe ser usuario
+startx
+
+# PARA SALIR es ALT+SHIF+Q
+
+
+
+## hay otras cosas que instalar antes
+sudo emerge --ask x11-apps/xsetroot
+
+#ahora con la app de arriba, le pasamos los permisos
+chmod +x ~/bin/dwm_status.sh
+
+sudo emerge --ask x11-fonts/terminus-font
+sudo emerge --ask media-fonts/terminus-font media-fonts/dejavu
+
+nano /etc/portage/savedconfig/x11-wm/dwm-*/config.h
+
+
+#static const char *fonts[] = { "DejaVu Sans Mono:size=10" }; modificado en  nano /etc/portage/savedconfig/x11-wm/dwm-*/config.h

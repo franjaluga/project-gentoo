@@ -7,4 +7,10 @@ locale-gen
 #es_ES UTF8
 eselect locale set 5
 
+#actualizar el teclado
+
+sudo sed -i 's/^keymap=".*"$/keymap="es"/' /etc/conf.d/keymaps
+sudo /etc/init.d/keymaps restart
+
+#=====
 env-update && source /etc/profile && export PS1="(chroot) ${PS1}"

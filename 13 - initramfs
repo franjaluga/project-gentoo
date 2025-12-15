@@ -14,4 +14,5 @@ emerge --ask sys-apps/systemd-utils
 
 emerge --ask sys-kernel/installkernel
 
-
+#Se agrega a condición de revisar lo que ocurre con el grub
+emerge --ask=n dracut grub
