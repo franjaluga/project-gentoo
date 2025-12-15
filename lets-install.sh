@@ -52,7 +52,7 @@ tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner -C /mnt/gentoo &
 ###########################################################
 # 3. Aplicar arquitectura nativa a la compilación
 ###########################################################
-sed -i '/^COMMON_FLAGS/ s/\"/\"-march=native /' /mnt/gentoo/etc/portage/make.conf
+sed -i '/^COMMON_FLAGS/ s/\"/\"-march=native /' /mnt/gentoo/etc/portage/make.conf && \
 
 
 ###########################################################
