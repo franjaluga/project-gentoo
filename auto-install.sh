@@ -24,6 +24,11 @@ install_inside_chroot() {
 
     emerge-webrsync
 
+    ###########################################################
+    # 5b. ¡AQUÍ ESTÁ EL LUGAR! (Para Root)
+    ###########################################################
+    echo "Estableciendo la contraseña de root (¡Introduce la contraseña ahora!)"
+    passwd
 
     ###########################################################
     # 6. Comando para binarios
