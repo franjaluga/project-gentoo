@@ -8,7 +8,7 @@ STAGE3="https://distfiles.gentoo.org/releases/amd64/autobuilds/20251207T170056Z/
 
 # Model(HP245): amdgpu radeonsi
 # Model(Qemu):  virgl
-VIRGL_DRIVER="virgl"
+VIRGL_DRIVER="amdgpu radeonsi"
 MOUNT_POINT="/mnt/gentoo"
 
 
@@ -47,7 +47,8 @@ install_inside_chroot() {
     ###########################################################
     # 8. Configurar video
     ###########################################################
-    echo '*/* VIDEO_CARDS: ${VIRGL_DRIVER}' >> /etc/portage/package.use/00video_cards
+    echo "VIDEO_CARDS=\"amdgpu radeonsi\"" >> /etc/portage/make.conf
+    echo "*/* video_cards_amdgpu video_cards_radeonsi" > /etc/portage/package.use/00video_cards
 
 
     ###########################################################
@@ -157,6 +158,21 @@ EOT
 
     emerge --ask=n -q net-misc/dhcpcd
 
+    emerge --ask=n -q net-wireless/wpa_supplicant
+
+    ###########################################################
+    # 16b. Configurar Red Inalámbrica (wlo1)
+    ###########################################################
+    ln -s /etc/init.d/net.lo /etc/init.d/net.wlo1
+    echo 'modules_wlo1="wpa_supplicant"' >> /etc/conf.d/net
+    echo 'config_wlo1="dhcp"' >> /etc/conf.d/net
+    
+    # Crear archivo config base para wpa_supplicant
+    mkdir -p /etc/wpa_supplicant
+    echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=wheel" > /etc/wpa_supplicant/wpa_supplicant.conf
+    echo "update_config=1" >> /etc/wpa_supplicant/wpa_supplicant.conf
+    
+    rc-update add net.wlo1 default
 
     ###########################################################
     # 17a. Configuración del arranque
@@ -181,21 +197,17 @@ EOT
     # 17b. Crear el usuario antes de salir
     ###########################################################
 
-    useradd -m -G users,wheel,audio,video,cdrom,portage -s /bin/bash tux
-    passwd tux
-
-
-    ###########################################################
-    # Configuraciones finales (añadidas)
-    ###########################################################
     emerge --ask=n -q app-admin/sudo
 
     sed -i '/^# %wheel[[:space:]]\+ALL=(ALL)[[:space:]]\+ALL/s/^# //' /etc/sudoers
 
-    sudo emerge --ask=n -q sys-kernel/linux-firmware
+    useradd -m -G users,wheel,audio,video,cdrom,portage -s /bin/bash tux
+    passwd tux
 
-    sudo rc-update add elogind default
-    sudo rc-service elogind start
+    emerge --ask=n -q sys-kernel/linux-firmware
+    
+    rc-update add elogind default
+    rc-service elogind start
 
     # El script saldrá automáticamente de esta función.
 }
@@ -208,7 +220,7 @@ export -f install_inside_chroot
 dd if=/dev/zero of=${TARGET_DISK} bs=512 count=1
 
 sfdisk ${TARGET_DISK} <<EOF
-label: dos
+label: gpt
 size=1G, type=83, bootable
 size=4G, type=82
 type=83
