@@ -45,10 +45,22 @@ install_inside_chroot() {
 
 
     ###########################################################
-    # 8. Configurar video
+    # 8. Configurar video y Red (Corregido)
     ###########################################################
-    echo "VIDEO_CARDS=\"amdgpu radeonsi\"" >> /etc/portage/make.conf
-    echo "*/* video_cards_amdgpu video_cards_radeonsi" > /etc/portage/package.use/00video_cards
+    echo 'VIDEO_CARDS="amdgpu radeonsi"' >> /etc/portage/make.conf
+    echo '*/* video_cards_amdgpu video_cards_radeonsi' > /etc/portage/package.use/00video_cards
+
+    # Configurar Red wlo1
+    ln -s /etc/init.d/net.lo /etc/init.d/net.wlo1
+    echo 'modules_wlo1="wpa_supplicant"' >> /etc/conf.d/net
+    echo 'config_wlo1="dhcp"' >> /etc/conf.d/net
+    echo 'associate_timeout_wlo1="60"' >> /etc/conf.d/net
+    
+    mkdir -p /etc/wpa_supplicant
+    echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=wheel" > /etc/wpa_supplicant/wpa_supplicant.conf
+    echo "update_config=1" >> /etc/wpa_supplicant/wpa_supplicant.conf
+    
+    rc-update add net.wlo1 default
 
 
     ###########################################################
@@ -119,7 +131,7 @@ install_inside_chroot() {
 
 
     ###########################################################
-    # 15. Fstab
+    # 15. Fstab (Sincronizado con montajes)
     ###########################################################
     UUID_D1=$(blkid -o value -s UUID /dev/sda1)
     UUID_D2=$(blkid -o value -s UUID /dev/sda2)
@@ -128,7 +140,7 @@ install_inside_chroot() {
     cat > /etc/fstab <<EOT
 UUID=$UUID_D1   /efi        vfat    umask=0077,tz=UTC     0 2
 UUID=$UUID_D2   none         swap    sw                   0 0
-UUID=$UUID_D3   /            xfs    defaults,noatime              0 1
+UUID=$UUID_D3   /            xfs    defaults,noatime      0 1
 EOT
 
     echo gentoo > /etc/hostname
@@ -179,9 +191,14 @@ EOT
     ###########################################################
     echo 'GRUB_PLATFORMS="efi-64"' >> /etc/portage/make.conf
 
-    emerge --ask=n -q sys-boot/grub efibootmgr neofetch
+    emerge --ask=n -q sys-boot/grub:2 efibootmgr
 
-    grub-install --efi-directory=/efi
+    emerge --ask=n -q neofetch
+
+    grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=Gentoo
+    grub-mkconfig -o /boot/grub/grub.cfg
+
+    # grub-install --efi-directory=/efi
     #se usa el de arriba VMWARE
     #grub-install --target=x86_64-efi --efi-directory=/efi --removable
 
@@ -215,16 +232,15 @@ export -f install_inside_chroot
 
 
 ###########################################################
-# 1. Particionado del disco
+# 1. Particionado del disco (GPT recomendado para EFI)
 ###########################################################
 dd if=/dev/zero of=${TARGET_DISK} bs=512 count=1
 
 sfdisk ${TARGET_DISK} <<EOF
 label: gpt
-size=1G, type=83, bootable
-size=4G, type=82
-type=83
-
+size=1G, type=C12A7328-F81F-11D2-BA4B-00A0C93EC93B
+size=4G, type=0657FD6D-A4AB-43C4-84E5-0933C84B4F4F
+type=0FC63DAF-8483-4772-8E79-3D69D8477DE4
 EOF
 
 D1="${TARGET_DISK}1"
@@ -234,13 +250,14 @@ D3="${TARGET_DISK}3"
 mkfs.vfat -F 32 $D1
 mkswap $D2
 swapon $D2
-mkfs.xfs $D3
+mkfs.xfs -f $D3
 
 mkdir -p $MOUNT_POINT
 mount $D3 $MOUNT_POINT
 
-mkdir -p $MOUNT_POINT/boot
-mount $D1 $MOUNT_POINT/boot
+# Unificamos a /efi
+mkdir -p $MOUNT_POINT/efi
+mount $D1 $MOUNT_POINT/efi
 
 
 ###########################################################
